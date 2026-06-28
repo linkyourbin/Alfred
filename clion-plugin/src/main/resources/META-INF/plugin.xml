@@ -1,0 +1,50 @@
+<idea-plugin>
+  <id>com.linkyourbin.alfred</id>
+  <name>Alfred</name>
+  <vendor>linkyourbin</vendor>
+  <description><![CDATA[
+    <p>Alfred is a CLion dev environment butler for multi-chip and embedded workflows.</p>
+    <p>
+      It snapshots project CLion configuration and IDE settings into named profiles,
+      so teams can set up STM32, HPM, ESP, RISC-V, or other chip environments once
+      and ask Alfred to bring the right environment back later.
+    </p>
+    <ul>
+      <li>Save current CLion settings as a named profile.</li>
+      <li>Update the active profile without retyping its name.</li>
+      <li>Stage profile switching safely for the next CLion startup.</li>
+      <li>Store profiles in the CLion config directory, not inside the project.</li>
+    </ul>
+  ]]></description>
+  <change-notes><![CDATA[
+    <ul>
+      <li>Initial Marketplace-ready release.</li>
+      <li>Renamed the plugin to Alfred.</li>
+      <li>Added named CLion dev environment snapshots.</li>
+      <li>Added active profile updates and safe staged switching.</li>
+      <li>Added Alfred plugin icons and Apache-2.0 licensing.</li>
+    </ul>
+  ]]></change-notes>
+  <version>0.8.0</version>
+  <idea-version since-build="222" />
+
+  <depends>com.intellij.modules.clion</depends>
+
+  <actions>
+    <group id="Alfred.DevEnvProfilesGroup" text="Alfred" popup="true">
+      <add-to-group group-id="ToolsMenu" anchor="last" />
+      <action id="Alfred.SaveDevEnvProfile"
+              class="com.linkyourbin.alfred.SaveDevEnvProfileAction"
+              text="Save Current Config as Profile..."
+              description="Save current CLion project and IDE settings as a named profile" />
+      <action id="Alfred.UpdateActiveProfile"
+              class="com.linkyourbin.alfred.UpdateActiveDevEnvProfileAction"
+              text="Update Active Profile"
+              description="Save current CLion settings into the active profile" />
+      <action id="Alfred.SwitchProfile"
+              class="com.linkyourbin.alfred.SwitchDevEnvProfileAction"
+              text="Switch Profile..."
+              description="Apply a saved profile from clion-dev-envs" />
+    </group>
+  </actions>
+</idea-plugin>
