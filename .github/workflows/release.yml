@@ -27,7 +27,9 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
+          # Latest CLion SDK classes are Java 21 bytecode. Gradle still emits
+          # Java 17 plugin classes via options.release in build.gradle.kts.
+          java-version: "21"
 
       - name: Resolve latest CLion release
         id: clion
