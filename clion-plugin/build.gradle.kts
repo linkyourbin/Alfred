@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream
 import java.util.Base64
 import javax.imageio.ImageIO
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
@@ -58,8 +59,23 @@ abstract class GeneratePluginIconTask : DefaultTask() {
     }
 }
 
-val clionHome = providers.gradleProperty("clionHome").orElse("D:/JetBrains/CLion")
 val pluginName = "alfred"
+
+val clionHome = providers.gradleProperty("clionHome")
+    .orElse(providers.environmentVariable("CLION_HOME"))
+    .orElse(providers.provider {
+        listOf(
+            "D:/JetBrains/CLion",
+            "C:/Program Files/JetBrains/CLion",
+            "/Applications/CLion.app/Contents",
+            "/opt/clion",
+            "/snap/clion/current"
+        ).firstOrNull { file(it).isDirectory }
+            ?: throw GradleException(
+                "CLion SDK not found. Set -PclionHome=<CLion install dir> or CLION_HOME. " +
+                    "On macOS, use /Applications/CLion.app/Contents."
+            )
+    })
 
 dependencies {
     compileOnly(fileTree(clionHome.map { "$it/lib" }) { include("*.jar") })

@@ -29,6 +29,16 @@ Alfred treats each setup as a named profile. Configure CLion once for a target,
 save it, and switch back to it later without manually rebuilding the setup from
 memory.
 
+## Platform Support
+
+Alfred is a platform-independent CLion plugin. The same `alfred.zip` release
+artifact can be installed on CLion for Windows, macOS, and Linux.
+
+Profiles are snapshots of local CLion settings, so they may contain
+machine-specific paths such as compiler locations, SDK paths, debugger paths, or
+probe tools. For cross-machine or cross-OS work, keep separate profiles for each
+machine or normalize those paths in CLion before saving the profile.
+
 ## Install
 
 ### Local Install from GitHub Releases
@@ -64,15 +74,16 @@ Tools > Alfred
 Every push to `master` builds `alfred.zip` with GitHub Actions. Versioned tags
 publish a GitHub Release and attach the installable plugin zip.
 
+The release workflow builds on Linux only because IntelliJ Platform plugin zips
+are Java artifacts and are not OS-specific. The generated `alfred.zip` is the
+one file users install on every CLion-supported platform.
+
 To publish a release:
 
 ```bash
 git tag v0.8.0
 git push origin v0.8.0
 ```
-
-The release workflow builds the plugin against the latest CLion release, uploads
-the zip as a workflow artifact, and attaches `alfred.zip` to the GitHub Release.
 
 ## Quick Start
 
