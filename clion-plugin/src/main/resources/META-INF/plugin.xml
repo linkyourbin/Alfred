@@ -6,7 +6,7 @@
     <p>Alfred is a CLion dev environment butler for multi-chip and embedded workflows.</p>
     <p>
       It snapshots project CLion configuration and IDE settings into named profiles,
-      so teams can set up STM32, HPM, ESP, RISC-V, or other chip environments once
+      so teams can set up Arm, RISC-V, or other embedded environments once
       and ask Alfred to bring the right environment back later.
     </p>
     <ul>
