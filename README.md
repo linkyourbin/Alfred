@@ -20,14 +20,14 @@ toolchains, SDKs, debuggers, or board configurations.
 
 ## Why Alfred
 
-CLion has excellent toolchain, CMake, debugger, and embedded development
-settings, but real embedded work often needs several complete environments in
-the same project. One chip may use OpenOCD and an ARM GCC toolchain, another may
-use a vendor SDK, another may use a different CMake preset and debugger setup.
+CLion keeps many development choices in project and IDE settings: toolchains,
+CMake presets, SDK paths, debugger settings, embedded tools, and other local
+configuration. Once a setup works, recreating it later by hand is slow and easy
+to get wrong.
 
-Alfred treats each setup as a named profile. Configure CLion once for a target,
-save it, and switch back to it later without manually rebuilding the setup from
-memory.
+Alfred treats a known-good CLion setup as a named profile. Save it when the
+environment is correct, update it when the setup changes, and switch back to it
+when you need that environment again.
 
 ## Platform Support
 
