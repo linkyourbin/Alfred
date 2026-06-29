@@ -12,9 +12,11 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     java
+    id("org.jetbrains.kotlin.jvm") version "2.3.21"
 }
 
 abstract class GeneratePluginIconTask : DefaultTask() {
@@ -85,6 +87,10 @@ tasks.withType<JavaCompile>().configureEach {
     options.release = 17
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+}
+
 tasks.jar {
     archiveBaseName = pluginName
 }
@@ -114,6 +120,7 @@ val buildPlugin = tasks.register<Zip>("buildPlugin") {
         from(rootProject.file("CHANGELOG.md"))
         into("lib") {
             from(tasks.jar)
+            from(configurations.runtimeClasspath)
         }
     }
 }
