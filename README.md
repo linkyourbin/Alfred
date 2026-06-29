@@ -8,16 +8,15 @@
   A CLion dev environment butler for embedded and multi-chip projects.
 </p>
 
+<p align="center">
+  <a href="https://github.com/linkyourbin/Alfred/actions/workflows/release.yml">
+    <img src="https://github.com/linkyourbin/Alfred/actions/workflows/release.yml/badge.svg" alt="Build and Release">
+  </a>
+</p>
+
 Alfred saves your current CLion project setup and IDE settings into named
 profiles, then lets you switch between them when you move between chips,
 toolchains, SDKs, debuggers, or board configurations.
-
-It is designed for workflows like:
-
-- `stm32f4-debug`
-- `hpm6750-release`
-- `esp32s3-openocd`
-- `riscv-probe-rs`
 
 ## Why Alfred
 
@@ -32,25 +31,48 @@ memory.
 
 ## Install
 
-Install the plugin zip from CLion:
+### Local Install from GitHub Releases
+
+Use this when you want to install Alfred from a release zip:
+
+1. Open the [Alfred Releases](https://github.com/linkyourbin/Alfred/releases) page.
+2. Download `alfred.zip` from the latest release.
+3. In CLion, open `Settings | Plugins`.
+4. Click the gear icon.
+5. Choose `Install Plugin from Disk...`.
+6. Select the downloaded `alfred.zip`.
+7. Restart CLion when prompted.
+
+### Install from Marketplace
+
+Use this when Alfred is available from the JetBrains Marketplace.
 
 1. Open `Settings | Plugins`.
-2. Click the gear icon.
-3. Choose `Install Plugin from Disk...`.
-4. Select `alfred.zip`.
+2. Select the `Marketplace` tab.
+3. Search for `Alfred`.
+4. Click `Install`.
 5. Restart CLion when prompted.
-
-For local development builds, the installable zip is:
-
-```text
-clion-plugin/build/distributions/alfred.zip
-```
 
 After installation, Alfred is available from:
 
 ```text
 Tools > Alfred
 ```
+
+## Releases
+
+Every push to `master` builds `alfred.zip` with GitHub Actions. Versioned tags
+publish a GitHub Release and attach the installable plugin zip.
+
+To publish a release:
+
+```bash
+git tag v0.8.0
+git push origin v0.8.0
+```
+
+The release workflow builds the plugin against the latest CLion release, uploads
+the zip as a workflow artifact, and attaches `alfred.zip` to the GitHub Release.
 
 ## Quick Start
 
@@ -145,18 +167,6 @@ Alfred also migrates older project-local profiles from:
 ```
 
 when it finds them.
-
-## Recommended Profile Names
-
-Use names that describe the chip, board, and purpose:
-
-- `stm32h7-openocd-debug`
-- `hpm6750-jlink-release`
-- `esp32s3-usb-debug`
-- `riscv-probe-rs-lab`
-
-Short, explicit names make switching safer when one project supports many
-targets.
 
 ## Practical Notes
 

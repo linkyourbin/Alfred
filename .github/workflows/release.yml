@@ -1,0 +1,87 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build plugin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Resolve latest CLion release
+        id: clion
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          url = "https://data.services.jetbrains.com/products/releases?code=CL&latest=true&type=release"
+          with urllib.request.urlopen(url, timeout=60) as response:
+              data = json.load(response)
+
+          release = data["CL"][0]
+          download_url = release["downloads"]["linux"]["link"]
+          version = release["version"]
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"url={download_url}\n")
+              output.write(f"version={version}\n")
+          PY
+
+      - name: Download CLion SDK
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/clion"
+          curl -fsSL "${{ steps.clion.outputs.url }}" -o "$RUNNER_TEMP/clion.tar.gz"
+          tar -xzf "$RUNNER_TEMP/clion.tar.gz" -C "$RUNNER_TEMP/clion" --strip-components=1
+
+      - name: Build Alfred plugin
+        shell: bash
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon test :clion-plugin:buildPlugin -PclionHome="$RUNNER_TEMP/clion"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: alfred-plugin
+          path: clion-plugin/build/distributions/alfred.zip
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release upload "$TAG_NAME" clion-plugin/build/distributions/alfred.zip --clobber
+          else
+            gh release create "$TAG_NAME" clion-plugin/build/distributions/alfred.zip \
+              --title "Alfred $TAG_NAME" \
+              --notes-file CHANGELOG.md
+          fi
