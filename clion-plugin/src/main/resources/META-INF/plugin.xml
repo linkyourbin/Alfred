@@ -25,7 +25,7 @@
       <li>Added Alfred plugin icons and Apache-2.0 licensing.</li>
     </ul>
   ]]></change-notes>
-  <version>0.8.0</version>
+  <version>1.0.0</version>
   <idea-version since-build="222" />
 
   <depends>com.intellij.modules.clion</depends>

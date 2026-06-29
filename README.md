@@ -81,8 +81,8 @@ one file users install on every CLion-supported platform.
 To publish a release:
 
 ```bash
-git tag v0.8.0
-git push origin v0.8.0
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 ## Quick Start

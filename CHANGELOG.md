@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0
+## 1.0.0
 
 - Prepared first Marketplace-ready release under vendor `linkyourbin`.
 - Renamed the plugin to Alfred.
